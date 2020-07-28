@@ -2,6 +2,7 @@
 함수형 프로그래밍
 High order function, 고차 함수와 Closure, 클로져가 있다.
 */
+//아직 bind 함수를 이해하지 못해서 이번주까지 공부할 계획입니다.
 
 /* 
 함수를 인자로 받는 함수는 대표적으로 map, forEach, reduce, sort 함수가 있다.
@@ -32,6 +33,7 @@ let filtered = firstArr.filter((element) => element.length > 5)
 console.log(filtered) // ["Kimchi","Banana","Hotdog","Orange"]
 
 //bind 함수 : 새로운 함수를 생성한다.
+//아직 bind 함수를 이해하지 못해서 이번주까지 공부할 계획입니다.
 
 //클로져 : 함수형 프로그래밍 패러다임의 대표적인 특성이다.
 //이미 생명주기가 끝난 외부 함수의 변수를 참조할 수 있는 변수라고 한다.
@@ -112,6 +114,44 @@ console.log(fn1) // 함수 호출 불가능
 //객체는 보통 객체 리터럴로 생성한다.
 //객체 리터럴을 사용하면 협업도 쉬워지고, 여러 속성 추가도 쉽게 할 수 있다.
 //new 연산자 또는 create 메소드를 이용해서 객체를 생성하면 속성 추가할 때 일일이 할당하거나 assign 메소드를 사용해야 한다.
+
+/*
+클로져는 함수 내부 로직을 바깥에 노출시키지 않게 하기 위해 사용되기도 한다.
+클로져를 사용함으로써 어떤 값을 접근할 수 있게 할지 구분할 수 있다.
+*/
+
+let outer = function() {
+    let a = 1;
+    let inner = function() {
+        return ++a
+    }
+    return inner
+}
+let outer2 = outer()
+console.log(outer2())
+console.log(outer2()) // 3
+//외부(전역 범위)에서 outer 함수 내부에 선언된 a의 값을 조작할 수 있다.
+//outer 함수 외부 범위에서는 outer 변수로 할당된 함수만 실행 가능하다.
+//내부에서 반환된 inner 변수(함수)만 접근할 수 있다.
+
+/*
+커링 함수 : 함수에 두 개 이상의 매개변수를 부여할 때 하나의 매개변수만 부여받을 수 있도록 구성한다.
+함수를 전부 실행하지 않으면 나머지 인자를 받을 때까지 작동하지 않는다.
+*/
+
+const curry = function(func){
+    return function(num1) {
+        return function(num2) {
+            return func(num1,num2)
+        }
+    }
+}
+
+//인자가 많아질 수록 코드가 복잡해지는 단점이 있다.
+//화살표 함수를 사용하여 한 줄에 표현할 수는 있다.
+const compariseTen = curry(Math.max)(10)
+console.log(compariseTen) // [Function]
+console.log(compariseTen(1)) // 10
 const smallObj = new Object()
 smallObj.height = 180;
 smallObj.weight = 90;
@@ -161,3 +201,8 @@ console.log(Symbol.keyFor(token))
 //심볼 객체는 iterator가 아니다 그래서 for of 또는 Object.keys으로는 원하는 value를 찾을 수 없다.
 //JSON stringify도 작동하지 않는다.
 //속성을 찾기 위해서는 getOwnPropertySymbols로 찾아야 한다.
+
+//출처
+//클로져 : 코어 자바스크립트
+//함수형 프로그래밍 : mdn 공식 문서
+//객체 더 알아보기 및 Symbol : mdn 공식 문서
